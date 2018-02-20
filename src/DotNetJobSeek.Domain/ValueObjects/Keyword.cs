@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace DotNetJobSeek.Domain.ValueObjects
+namespace DotNetJobSeek.Domain
 {
     public class Keyword
     {
@@ -12,9 +12,9 @@ namespace DotNetJobSeek.Domain.ValueObjects
         public int Weight { get; set; }
 
 
-        private ICollection<TagKeyword> TagKeywords { get; } = new List<TagKeyword>();
+        public virtual ICollection<TagKeyword> TagKeywords { get; } = new List<TagKeyword>();
 
-        [NotMapped]
-        public IEnumerable<Tag> Tags => TagKeywords.Select(e => e.Tag);
+        // [NotMapped]
+        // public IEnumerable<Tag> Tags => TagKeywords.Select(e => e.Tag);
     }
 }
