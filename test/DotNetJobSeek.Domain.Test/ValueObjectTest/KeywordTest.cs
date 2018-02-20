@@ -94,7 +94,6 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
                     test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
-                    System.Console.WriteLine(test.Name);
                 }
                 Assert.Equal("food1", test.Name);                
             }
