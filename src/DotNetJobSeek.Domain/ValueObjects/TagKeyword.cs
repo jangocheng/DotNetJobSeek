@@ -1,7 +1,6 @@
-using DotNetJobSeek.Domain.ValueObjects;
 using System.Collections.Generic;
 
-namespace DotNetJobSeek.Domain.ValueObjects
+namespace DotNetJobSeek.Domain
 {
     public class TagKeyword
     {

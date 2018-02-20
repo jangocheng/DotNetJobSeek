@@ -10,3 +10,7 @@ test:
   stage: test
   script:
     - "dotnet test test/*"
+
+ only:
+   - master
+   - develop
