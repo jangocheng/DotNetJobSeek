@@ -19,7 +19,7 @@ namespace DotNetJobSeek.Domain.Test
             k3 = new Keyword { Id = 3, Name = "hotel" };
             t1 = new Tag { Id = 1, Name = "bar"};
             t2 = new Tag { Id = 2, Name = "move"};
-            t3 = new Tag { Id = 3, Name = "live"};ß
+            t3 = new Tag { Id = 3, Name = "live"};
         }
         [Fact]
         public void TestTagAdd()
@@ -80,7 +80,10 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.AddRange(k1);
+                    context.AddRange(
+                        new TagKeyword { Tag = t1, Keyword = k1 },
+                        new TagKeyword { Tag = t2, Keyword = k1 }
+                    );
                     try
                     {
                         context.SaveChanges();
@@ -101,7 +104,6 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
                     test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
-                    System.Console.WriteLine(test.Name);
                 }
                 Assert.Equal("food1", test.Name);                
             }

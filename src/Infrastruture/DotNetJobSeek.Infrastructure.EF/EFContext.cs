@@ -19,6 +19,7 @@ namespace DotNetJobSeek.Infrastructure.EF
         { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // set default connection string
             if(!optionsBuilder.IsConfigured)
             {
                 // optionsBuilder.UseSqlite(@"DataSource=../../mydb.db");
