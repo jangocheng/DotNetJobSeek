@@ -103,5 +103,54 @@ namespace DotNetJobSeek.Domain.Test
             }
 
         }
+
+        [Fact]
+        public void TestKeywordNeighbors()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            Keyword test;
+            connection.Open();
+            try
+            {
+                var options = new DbContextOptionsBuilder<EFContext>()
+                    .UseSqlite(connection)
+                    .Options;
+                using(var context = new EFContext(options))
+                {
+                    context.Database.EnsureCreated();
+                }
+                using(var context = new EFContext(options))
+                {
+
+                    context.Keywords.Add(k1);
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (System.Exception)
+                    { 
+                        throw;
+                    }
+                }
+
+                using(var context = new EFContext(options))
+                {
+                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    testUpdate.Name = "food1";
+                    context.Keywords.Update(testUpdate);
+                    context.SaveChanges();
+                }
+                using(var context = new EFContext(options))
+                {
+                    test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                }
+                Assert.Equal("food1", test.Name);                
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }        
     }
 }
