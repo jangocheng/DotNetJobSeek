@@ -1,9 +1,9 @@
-using DotNetJobSeek.Domain.ValueObjects;
+using DotNetJobSeek.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace DotNetJobSeek.Domain.ValueObjects
+namespace DotNetJobSeek.Domain
 {
     public class Tag
     {
@@ -11,9 +11,9 @@ namespace DotNetJobSeek.Domain.ValueObjects
        public string Name { get; set; }
        public int Version { get; set; }
 
-       private ICollection<TagKeyword> TagKeywords { get; } = new List<TagKeyword>();
+       public virtual ICollection<TagKeyword> TagKeywords { get; set; }
 
-       [NotMapped]
-       public IEnumerable<Keyword> Keywords => TagKeywords.Select(e => new Keyword {Id = e.Keyword.Id, Name = e.Keyword.Name, Weight = e.Weight });
+    //    [NotMapped]
+    //    public IEnumerable<Keyword> Keywords => TagKeywords.Select(e => new Keyword {Id = e.Keyword.Id, Name = e.Keyword.Name, Weight = e.Weight });
     }
 }

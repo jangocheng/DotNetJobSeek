@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotNetJobSeek.Domain\DotNetJobSeek.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Infrastruture\DotNetJobSeek.Infrastructure.EF\DotNetJobSeek.Infrastructure.EF.csproj" />
   </ItemGroup>
 
 </Project>

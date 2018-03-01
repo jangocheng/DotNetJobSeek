@@ -1,0 +1,15 @@
+image: microsoft/dotnet:latest
+
+stages:
+  - test
+
+before_script:
+  - "dotnet restore"
+
+test:
+  stage: test
+  script:
+    - "dotnet test test/*"
+  only:
+    - master
+    - develop
