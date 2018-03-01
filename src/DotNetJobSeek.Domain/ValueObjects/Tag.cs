@@ -11,7 +11,7 @@ namespace DotNetJobSeek.Domain
        public string Name { get; set; }
        public int Version { get; set; }
 
-       public virtual ICollection<TagKeyword> TagKeywords { get; } = new List<TagKeyword>();
+       public virtual ICollection<TagKeyword> TagKeywords { get; set; }
 
     //    [NotMapped]
     //    public IEnumerable<Keyword> Keywords => TagKeywords.Select(e => new Keyword {Id = e.Keyword.Id, Name = e.Keyword.Name, Weight = e.Weight });

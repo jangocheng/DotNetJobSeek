@@ -33,6 +33,7 @@ namespace DotNetJobSeek.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new TagMapper());
             modelBuilder.ApplyConfiguration(new KeywordMapper());
             modelBuilder.ApplyConfiguration(new TagKeywordMapper());
+            modelBuilder.ApplyConfiguration(new KeywordNeighborsMapper());
         }
 
         public DbSet<Keyword> Keywords { get; set; }

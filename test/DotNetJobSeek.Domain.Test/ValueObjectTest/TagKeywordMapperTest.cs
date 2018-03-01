@@ -103,15 +103,19 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    test = context.Keywords.Where(k => k.Id == 1)
+                                    .Include(t => t.TagKeywords)
+                                        .ThenInclude(tk => tk.Tag)
+                                .FirstOrDefault();
                 }
-                Assert.Equal("food1", test.Name);                
+                Assert.Equal("food1", test.Name);
+                Assert.Equal(2, test.TagKeywords.Count);
+                Assert.Equal("bar", test.TagKeywords.Where(tk => tk.TagId == 1).First().Tag.Name);
             }
             finally
             {
                 connection.Close();
             }
-
         }
     }
 }
