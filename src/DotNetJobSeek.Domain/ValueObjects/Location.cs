@@ -9,6 +9,6 @@ namespace DotNetJobSeek.Domain
         public string Address { get; set; }
 
         public int? LocalityId { get; set; }
-        public Locality Locality { get; set; }
+        public virtual Locality Locality { get; set; }
     }
 }

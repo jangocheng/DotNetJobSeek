@@ -9,6 +9,6 @@ namespace DotNetJobSeek.Domain
         public string Name { set; get; }
         public string Country { set; get; } 
 
-        public ICollection<Locality> Localities { set; get; }
+        public virtual ICollection<Locality> Localities { set; get; }
     }
 }

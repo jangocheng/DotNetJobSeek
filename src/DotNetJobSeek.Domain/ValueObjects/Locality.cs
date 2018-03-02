@@ -12,6 +12,6 @@ namespace DotNetJobSeek.Domain
        public int StateId { get; set; }
        public State State { get; set; }
 
-       public ICollection<Location> Locations { get; set; }
+       public virtual ICollection<Location> Locations { get; set; }
     }
 }

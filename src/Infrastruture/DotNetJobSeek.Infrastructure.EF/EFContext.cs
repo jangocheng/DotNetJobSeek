@@ -30,14 +30,22 @@ namespace DotNetJobSeek.Infrastructure.EF
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // tag
             modelBuilder.ApplyConfiguration(new TagMapper());
             modelBuilder.ApplyConfiguration(new KeywordMapper());
             modelBuilder.ApplyConfiguration(new TagKeywordMapper());
+            // keyword
             modelBuilder.ApplyConfiguration(new KeywordNeighborMapper());
             modelBuilder.ApplyConfiguration(new TagNeighborMapper());
+            // category
             modelBuilder.ApplyConfiguration(new CategoryNeighborMapper());
+            modelBuilder.ApplyConfiguration(new ValueObjectMapper<Category>());
+            // location
             modelBuilder.ApplyConfiguration(new LocationMapper());
             modelBuilder.ApplyConfiguration(new LocalityMapper());
+            // skill
+            modelBuilder.ApplyConfiguration(new SkillTagMapper());
+            modelBuilder.ApplyConfiguration(new SkillNeighborMapper());            
         
         }
 
