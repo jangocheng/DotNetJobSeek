@@ -8,24 +8,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetJobSeek.Domain.Test
 {
-    public class TagKeywordMapperTest
+    public class LocationTest
     {
-        Keyword k1, k2, k3;
-        Tag t1, t2, t3;
-        public TagKeywordMapperTest()
+        Location t1, t2, t3, t4, t5;
+        Locality locality1;
+        State s1;
+        public LocationTest()
         {
-            k1 = new Keyword { Name = "food" };
-            k2 = new Keyword { Name = "drink" };
-            k3 = new Keyword { Name = "hotel" };
-            t1 = new Tag { Name = "bar"};
-            t2 = new Tag { Name = "move"};
-            t3 = new Tag { Name = "live"};
+            t1 = new Location { Geohash = "1", Address = "food" };
+            t2 = new Location { Geohash = "2", Address = "meat" };
+            t3 = new Location { Geohash = "3", Address = "drink" };
+            t4 = new Location { Geohash = "4", Address = "meal" };
+            t5 = new Location { Geohash = "5", Address = "dog" };
+            locality1 = new Locality { Name = "Hobart", Postcode = "7000" };
+            s1 = new State { Name = "Tasmania", Country = "Australia" };
         }
         [Fact]
-        public void TestTagAdd()
+        public void TestLocationsAdd()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Tag test;
+            Location test;
             connection.Open();
             try
             {
@@ -38,8 +40,9 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-
-                    context.Tags.Add(t1);
+                    locality1.State = s1;
+                    t1.Locality = locality1;
+                    context.Locations.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -51,10 +54,15 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Tags.Where(k => k.Id == 1).FirstOrDefault();
+                    test = context.Locations.Where(t => t.Geohash == "1")
+                    .Include(l => l.Locality)
+                        .ThenInclude(lct => lct.State)
+                    .FirstOrDefault();
                 }
-                Assert.Equal("bar", test.Name);
-                Assert.Equal(0, test.Version);
+                Assert.Equal("food", test.Address);
+                Assert.Equal("Hobart", test.Locality.Name);
+                Assert.Equal("7000", test.Locality.Postcode);
+                Assert.Equal("Tasmania", test.Locality.State.Name);
             }
             finally
             {
@@ -63,10 +71,10 @@ namespace DotNetJobSeek.Domain.Test
 
         }
         [Fact]
-        public void TestTagKeywordsAddUpdate()
+        public void TestLocationsUpdate()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Location test;
             connection.Open();
             try
             {
@@ -80,10 +88,9 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.AddRange(
-                        new TagKeyword { Tag = t1, Keyword = k1 },
-                        new TagKeyword { Tag = t2, Keyword = k1 }
-                    );
+                    locality1.State = s1;
+                    t1.Locality = locality1;
+                    context.Locations.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -96,26 +103,32 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
-                    testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
+                    var testUpdate = context.Locations.Where(t => t.Geohash == "1")
+                    .Include(l => l.Locality)
+                        .ThenInclude(lct => lct.State)
+                    .FirstOrDefault();
+                    testUpdate.Address = "food1";
+                    testUpdate.Locality.Name = "Midway";
+                    testUpdate.Locality.Postcode = "7171";
+
+                    testUpdate.Locality.State.Name = "Tas";
+                    context.Locations.Update(testUpdate);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1)
-                                    .Include(t => t.TagKeywords)
-                                        .ThenInclude(tk => tk.Tag)
-                                .FirstOrDefault();
+                    test = context.Locations.Where(t => t.Geohash == "1")
+                    .Include(l => l.Locality)
+                        .ThenInclude(lct => lct.State)
+                    .FirstOrDefault();
                 }
-                Assert.Equal("food1", test.Name);
-                Assert.Equal(2, test.TagKeywords.Count);
-                Assert.Equal("bar", test.TagKeywords.Where(tk => tk.TagId == 1).First().Tag.Name);
+                Assert.Equal("food1", test.Address);                
             }
             finally
             {
                 connection.Close();
             }
+
         }
     }
 }

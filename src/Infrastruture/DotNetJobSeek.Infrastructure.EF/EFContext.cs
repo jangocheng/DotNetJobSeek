@@ -33,11 +33,20 @@ namespace DotNetJobSeek.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new TagMapper());
             modelBuilder.ApplyConfiguration(new KeywordMapper());
             modelBuilder.ApplyConfiguration(new TagKeywordMapper());
-            modelBuilder.ApplyConfiguration(new KeywordNeighborsMapper());
+            modelBuilder.ApplyConfiguration(new KeywordNeighborMapper());
+            modelBuilder.ApplyConfiguration(new TagNeighborMapper());
+            modelBuilder.ApplyConfiguration(new CategoryNeighborMapper());
+            modelBuilder.ApplyConfiguration(new LocationMapper());
+            modelBuilder.ApplyConfiguration(new LocalityMapper());
+        
         }
 
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Locality> Localities { get; set; }
+
     }
     class Program
     {

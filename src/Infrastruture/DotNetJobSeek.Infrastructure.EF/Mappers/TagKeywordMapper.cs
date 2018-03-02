@@ -10,7 +10,7 @@ namespace DotNetJobSeek.Infrastructure.EF
         public void Configure(EntityTypeBuilder<TagKeyword> builder)
         {
             builder.HasKey(t => new { t.TagId, t.KeywordId });
-
+            // many to many
             builder.HasOne(tk => tk.Tag).WithMany(t => t.TagKeywords).HasForeignKey(tk => tk.TagId);
             builder.HasOne(tk => tk.Keyword).WithMany(k => k.TagKeywords).HasForeignKey(tk => tk.KeywordId);
 

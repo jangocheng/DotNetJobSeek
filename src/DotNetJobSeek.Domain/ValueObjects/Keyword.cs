@@ -14,8 +14,8 @@ namespace DotNetJobSeek.Domain
 
         public virtual ICollection<TagKeyword> TagKeywords { get; set; } 
 
-        public virtual ICollection<KeywordNeighbors> Lefts { get; set; }
-        public virtual ICollection<KeywordNeighbors> Rights { get; set; }
+        public virtual ICollection<KeywordNeighbor> Lefts { get; set; }
+        public virtual ICollection<KeywordNeighbor> Rights { get; set; }
 
         // [NotMapped]
         // public IEnumerable<Tag> Tags => TagKeywords.Select(e => e.Tag);
