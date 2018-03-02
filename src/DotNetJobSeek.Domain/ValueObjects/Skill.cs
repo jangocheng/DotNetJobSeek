@@ -3,13 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNetJobSeek.Domain
 {
-    public class Skill
+    public class Skill : ValueObject
     {
-        public int Id { set; get; }
-        public string Name { set; get; } 
 
         public virtual ICollection<SkillTag> SkillTags { get; set; }
-        
+
         public virtual ICollection<SkillNeighbor> Lefts { get; set; }
         public virtual ICollection<SkillNeighbor> Rights { get; set; }
 

@@ -32,18 +32,19 @@ namespace DotNetJobSeek.Infrastructure.EF
         {
             // tag
             modelBuilder.ApplyConfiguration(new TagMapper());
-            modelBuilder.ApplyConfiguration(new KeywordMapper());
+            modelBuilder.ApplyConfiguration(new TagNeighborMapper());
             modelBuilder.ApplyConfiguration(new TagKeywordMapper());
             // keyword
+            modelBuilder.ApplyConfiguration(new ValueObjectMapper<Keyword>());
             modelBuilder.ApplyConfiguration(new KeywordNeighborMapper());
-            modelBuilder.ApplyConfiguration(new TagNeighborMapper());
             // category
-            modelBuilder.ApplyConfiguration(new CategoryNeighborMapper());
             modelBuilder.ApplyConfiguration(new ValueObjectMapper<Category>());
+            modelBuilder.ApplyConfiguration(new CategoryNeighborMapper());
             // location
             modelBuilder.ApplyConfiguration(new LocationMapper());
             modelBuilder.ApplyConfiguration(new LocalityMapper());
             // skill
+            modelBuilder.ApplyConfiguration(new ValueObjectMapper<Skill>());
             modelBuilder.ApplyConfiguration(new SkillTagMapper());
             modelBuilder.ApplyConfiguration(new SkillNeighborMapper());            
         
@@ -54,6 +55,7 @@ namespace DotNetJobSeek.Infrastructure.EF
         public DbSet<Category> Categories { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Locality> Localities { get; set; }
+        public DbSet<Skill> Skills { get; set; }
 
     }
     class Program
