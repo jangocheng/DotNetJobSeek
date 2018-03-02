@@ -20,7 +20,7 @@ namespace DotNetJobSeek.Domain.Test
             k5 = new Keyword { Name = "dog" };
         }
         [Fact]
-        public void TestKeywordsAdd()
+        public void TestCreate()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             Keyword test;
@@ -60,7 +60,7 @@ namespace DotNetJobSeek.Domain.Test
 
         }
         [Fact]
-        public void TestKeywordsUpdate()
+        public void TestUpdate()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             Keyword test;
@@ -108,7 +108,7 @@ namespace DotNetJobSeek.Domain.Test
         }
 
         [Fact]
-        public void TestKeywordsDelete()
+        public void TestDelete()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             Keyword test;
@@ -156,7 +156,7 @@ namespace DotNetJobSeek.Domain.Test
         }
 
         [Fact]
-        public void TestKeywordNeighbors()
+        public void TestNeighbors()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             Keyword test;

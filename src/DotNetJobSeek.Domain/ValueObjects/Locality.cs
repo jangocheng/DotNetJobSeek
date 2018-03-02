@@ -3,15 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNetJobSeek.Domain
 {
-    public class Locality
+    public class Locality : ValueObject
     {
-       public int Id { get; set; }
-       public string Name { get; set; }
        public string Postcode { get; set; }
 
        public int StateId { get; set; }
        public State State { get; set; }
 
-       public ICollection<Location> Locations { get; set; }
+       public virtual ICollection<Location> Locations { get; set; }
     }
 }

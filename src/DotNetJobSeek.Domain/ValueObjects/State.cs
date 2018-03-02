@@ -3,12 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNetJobSeek.Domain
 {
-    public class State
+    public class State : ValueObject
     {
-        public int Id { set; get; }
-        public string Name { set; get; }
         public string Country { set; get; } 
 
-        public ICollection<Locality> Localities { set; get; }
+        public virtual ICollection<Locality> Localities { set; get; }
     }
 }

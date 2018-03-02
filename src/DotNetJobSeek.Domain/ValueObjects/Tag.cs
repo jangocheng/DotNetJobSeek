@@ -5,13 +5,12 @@ using System.Linq;
 
 namespace DotNetJobSeek.Domain
 {
-    public class Tag
+    public class Tag : ValueObject
     {
-       public int Id { get; set; }
-       public string Name { get; set; }
        public int Version { get; set; }
 
        public virtual ICollection<TagKeyword> TagKeywords { get; set; }
+       public virtual ICollection<SkillTag> SkillTags { get; set; }
        
        public virtual ICollection<TagNeighbor> Lefts { get; set; }
        public virtual ICollection<TagNeighbor> Rights { get; set; }

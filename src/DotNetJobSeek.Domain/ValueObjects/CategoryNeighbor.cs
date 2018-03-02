@@ -1,13 +1,6 @@
 namespace DotNetJobSeek.Domain
 {
-    public class CategoryNeighbor
+    public class CategoryNeighbor : Neighbor<Category>
     {
-       public int LeftId { get; set; }
-       public Category Left { get; set; }
-
-       public int RightId { get; set; }
-       public Category Right { get; set; }
-
-       public int Weight { get; set; }
     }
 }

@@ -4,14 +4,8 @@ using System.Linq;
 
 namespace DotNetJobSeek.Domain
 {
-    public class Keyword
+    public class Keyword : ValueObject
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        [NotMapped]
-        public int Weight { get; set; }
-
-
         public virtual ICollection<TagKeyword> TagKeywords { get; set; } 
 
         public virtual ICollection<KeywordNeighbor> Lefts { get; set; }
