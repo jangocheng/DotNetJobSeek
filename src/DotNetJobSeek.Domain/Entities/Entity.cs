@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace DotNetJobSeek.Domain
 {
     /// Entity class 
     public abstract class Entity : IEntity
     {
-        private object _key;
+        private string _id;
 
-        public virtual object Key
+        public virtual string Id
         {
             get 
             {
-                return this._key;
+                return this._id;
             }
             set 
             {
                 if (value == null) 
                 {
-                    throw new ArgumentNullException("Key", "Key property should be null");
+                    this._id = System.Guid.NewGuid().ToString();
+                } else {
+                    this._id = value;
                 }
-                this._key = value;
             }
         }
-
     }
 }

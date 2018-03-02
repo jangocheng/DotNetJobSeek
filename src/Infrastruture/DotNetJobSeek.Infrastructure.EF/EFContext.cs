@@ -49,13 +49,16 @@ namespace DotNetJobSeek.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new SkillNeighborMapper());            
         
         }
-
+        // ValueObjects
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Locality> Localities { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        // Job Entities
+        public DbSet<Requirement> Requirements { get; set; }
+
 
     }
     class Program
