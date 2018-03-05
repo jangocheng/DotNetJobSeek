@@ -9,6 +9,8 @@ namespace DotNetJobSeek.Domain
     public abstract class Entity : IEntity
     {
         private string _id;
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
 
         public virtual string Id
         {
