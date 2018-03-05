@@ -8,22 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetJobSeek.Domain.Test
 {
-    public class KeywordTest
+    public class CategoryTest
     {
-        Keyword k1, k2, k3, k4, k5;
-        public KeywordTest()
+        Category t1, t2, t3, t4, t5;
+        public CategoryTest()
         {
-            k1 = new Keyword { Name = "food" };
-            k2 = new Keyword { Name = "meat" };
-            k3 = new Keyword { Name = "drink" };
-            k4 = new Keyword { Name = "meal" };
-            k5 = new Keyword { Name = "dog" };
+            t1 = new Category { Id = 1, Name = "food" };
+            t2 = new Category { Id = 2, Name = "meat" };
+            t3 = new Category { Id = 3, Name = "drink" };
+            t4 = new Category { Id = 4, Name = "meal" };
+            t5 = new Category { Id = 5, Name = "dog" };
         }
         [Fact]
-        public void TestCreate()
+        public void TestInsert()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Category test;
             connection.Open();
             try
             {
@@ -37,7 +37,7 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.Add(k1);
+                    context.Categories.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -49,7 +49,7 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Name == "food").FirstOrDefault();
+                    test = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
                 }
                 Assert.Equal("food", test.Name);
             }
@@ -63,7 +63,7 @@ namespace DotNetJobSeek.Domain.Test
         public void TestUpdate()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Category test;
             connection.Open();
             try
             {
@@ -77,7 +77,7 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.Add(k1);
+                    context.Categories.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -90,14 +90,14 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    var testUpdate = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
                     testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
+                    context.Categories.Update(testUpdate);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    test = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
                 }
                 Assert.Equal("food1", test.Name);                
             }
@@ -105,13 +105,14 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
+
         }
 
         [Fact]
         public void TestDelete()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Category test;
             connection.Open();
             try
             {
@@ -125,7 +126,7 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.Add(k1);
+                    context.Categories.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -138,14 +139,14 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testDelete = new Keyword { Id = 1 };
-                    context.Keywords.Attach(testDelete);
-                    context.Keywords.Remove(testDelete);
+                    var testDelete = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
+                    context.Categories.Attach(testDelete);
+                    context.Categories.Remove(testDelete);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Name == "food").FirstOrDefault();
+                    test = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
                 }
                 Assert.Null(test);                
             }
@@ -153,13 +154,14 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
+
         }
 
         [Fact]
         public void TestNeighbors()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Category test;
             connection.Open();
             try
             {
@@ -174,10 +176,10 @@ namespace DotNetJobSeek.Domain.Test
                 {
 
                     context.AddRange(
-                        new KeywordNeighbor { Left = k1, Right = k2 },
-                        new KeywordNeighbor { Left = k1, Right = k3 },
-                        new KeywordNeighbor { Left = k1, Right = k4 },
-                        new KeywordNeighbor { Left = k2, Right = k4 }
+                        new CategoryNeighbor { Left = t1, Right = t2 },
+                        new CategoryNeighbor { Left = t1, Right = t3 },
+                        new CategoryNeighbor { Left = t1, Right = t4 },
+                        new CategoryNeighbor { Left = t2, Right = t4 }
                     );
                     try
                     {
@@ -191,17 +193,17 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    var testUpdate = context.Categories.Where(t => t.Id == 1).FirstOrDefault();
                     testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
+                    context.Categories.Update(testUpdate);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1)
-                            .Include(k => k.Rights)
+                    test = context.Categories.Where(t => t.Id == 1)
+                            .Include(t => t.Rights)
                                 .ThenInclude(tn => tn.Left)
-                            .Include(k => k.Lefts)
+                            .Include(t => t.Lefts)
                                 .ThenInclude(tn => tn.Right)
                     .FirstOrDefault();
                 }
@@ -213,6 +215,7 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
-        }
+
+        }        
     }
 }

@@ -8,24 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetJobSeek.Domain.Test
 {
-    public class TagKeywordMapperTest
+    public class RequirementTest
     {
-        Keyword k1, k2, k3;
-        Tag t1, t2, t3;
-        public TagKeywordMapperTest()
+        Requirement s1, s2, s3, s4, s5;
+        public RequirementTest()
         {
-            k1 = new Keyword { Name = "food" };
-            k2 = new Keyword { Name = "drink" };
-            k3 = new Keyword { Name = "hotel" };
-            t1 = new Tag { Name = "bar"};
-            t2 = new Tag { Name = "move"};
-            t3 = new Tag { Name = "live"};
+            s1 = new Requirement { Description = "food" };
+            s2 = new Requirement { Description = "meat" };
+            s3 = new Requirement { Description = "drink" };
+            s4 = new Requirement { Description = "meal" };
+            s5 = new Requirement { Description = "dog" };
         }
         [Fact]
-        public void TestTagAdd()
+        public void TestInsert()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Tag test;
+            Requirement test;
             connection.Open();
             try
             {
@@ -38,8 +36,7 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-
-                    context.Tags.Add(t1);
+                    context.Requirements.AddRange(s1, s2, s3,s4);
                     try
                     {
                         context.SaveChanges();
@@ -51,22 +48,20 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Tags.Where(k => k.Id == 1).FirstOrDefault();
+                    test = context.Requirements.FirstOrDefault();
                 }
-                Assert.Equal("bar", test.Name);
-                Assert.Equal(0, test.Version);
+                Assert.Equal("food", test.Description);
             }
             finally
             {
                 connection.Close();
             }
-
         }
+
         [Fact]
-        public void TestTagKeywordsAddUpdate()
+        public void TestDelete()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
             connection.Open();
             try
             {
@@ -80,37 +75,36 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.AddRange(
-                        new TagKeyword { Tag = t1, Keyword = k1 },
-                        new TagKeyword { Tag = t2, Keyword = k1 }
-                    );
+                    context.Requirements.AddRange(s1, s2, s3,s4);
                     try
                     {
                         context.SaveChanges();
                     }
                     catch (System.Exception)
-                    { 
+                    {
                         throw;
                     }
                 }
+                using(var context = new EFContext(options))
+                {
+                    var testDelete = context.Requirements.FirstOrDefault();
 
+                    context.Requirements.Attach(testDelete);
+                    context.Requirements.Remove(testDelete);
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (System.Exception)
+                    {
+                        throw;
+                    }
+                }                
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
-                    testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
-                    context.SaveChanges();
+                    int count = context.Requirements.Select(t => t.Id).Count();
+                    Assert.Equal(3, count);
                 }
-                using(var context = new EFContext(options))
-                {
-                    test = context.Keywords.Where(k => k.Id == 1)
-                                    .Include(t => t.TagKeywords)
-                                        .ThenInclude(tk => tk.Tag)
-                                .FirstOrDefault();
-                }
-                Assert.Equal("food1", test.Name);
-                Assert.Equal(2, test.TagKeywords.Count);
-                Assert.Equal("bar", test.TagKeywords.Where(tk => tk.TagId == 1).First().Tag.Name);
             }
             finally
             {

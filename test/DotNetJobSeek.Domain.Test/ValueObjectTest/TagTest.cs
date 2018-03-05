@@ -8,22 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotNetJobSeek.Domain.Test
 {
-    public class KeywordTest
+    public class TagTest
     {
-        Keyword k1, k2, k3, k4, k5;
-        public KeywordTest()
+        Tag t1, t2, t3, t4, t5;
+        public TagTest()
         {
-            k1 = new Keyword { Name = "food" };
-            k2 = new Keyword { Name = "meat" };
-            k3 = new Keyword { Name = "drink" };
-            k4 = new Keyword { Name = "meal" };
-            k5 = new Keyword { Name = "dog" };
+            t1 = new Tag { Name = "food" };
+            t2 = new Tag { Name = "meat" };
+            t3 = new Tag { Name = "drink" };
+            t4 = new Tag { Name = "meal" };
+            t5 = new Tag { Name = "dog" };
         }
         [Fact]
-        public void TestCreate()
+        public void TestTagsAdd()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Tag test;
             connection.Open();
             try
             {
@@ -37,7 +37,7 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.Add(k1);
+                    context.Tags.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -49,7 +49,7 @@ namespace DotNetJobSeek.Domain.Test
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Name == "food").FirstOrDefault();
+                    test = context.Tags.Where(t => t.Id == 1).FirstOrDefault();
                 }
                 Assert.Equal("food", test.Name);
             }
@@ -57,13 +57,13 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
-
         }
+
         [Fact]
-        public void TestUpdate()
+        public void TestTagsDelete()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Tag test;
             connection.Open();
             try
             {
@@ -77,7 +77,62 @@ namespace DotNetJobSeek.Domain.Test
                 using(var context = new EFContext(options))
                 {
 
-                    context.Keywords.Add(k1);
+                    context.Tags.Add(t1);
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (System.Exception)
+                    {
+                        throw;
+                    }
+                }
+                using(var context = new EFContext(options))
+                {
+                    var testDelete = context.Tags.Where(t => t.Name == "food").FirstOrDefault();
+
+                    context.Tags.Attach(testDelete);
+                    context.Tags.Remove(testDelete);
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (System.Exception)
+                    {
+                        throw;
+                    }
+                }                
+                using(var context = new EFContext(options))
+                {
+                    test = context.Tags.Where(t => t.Id == 1).FirstOrDefault();
+                }
+                Assert.Null(test);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        [Fact]
+        public void TestTagsUpdate()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            Tag test;
+            connection.Open();
+            try
+            {
+                var options = new DbContextOptionsBuilder<EFContext>()
+                    .UseSqlite(connection)
+                    .Options;
+                using(var context = new EFContext(options))
+                {
+                    context.Database.EnsureCreated();
+                }
+                using(var context = new EFContext(options))
+                {
+
+                    context.Tags.Add(t1);
                     try
                     {
                         context.SaveChanges();
@@ -90,14 +145,14 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    var testUpdate = context.Tags.Where(t => t.Id == 1).FirstOrDefault();
                     testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
+                    context.Tags.Update(testUpdate);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    test = context.Tags.Where(t => t.Id == 1).FirstOrDefault();
                 }
                 Assert.Equal("food1", test.Name);                
             }
@@ -105,61 +160,14 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
+
         }
 
         [Fact]
-        public void TestDelete()
+        public void TestTagNeighbors()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
-            connection.Open();
-            try
-            {
-                var options = new DbContextOptionsBuilder<EFContext>()
-                    .UseSqlite(connection)
-                    .Options;
-                using(var context = new EFContext(options))
-                {
-                    context.Database.EnsureCreated();
-                }
-                using(var context = new EFContext(options))
-                {
-
-                    context.Keywords.Add(k1);
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (System.Exception)
-                    { 
-                        throw;
-                    }
-                }
-
-                using(var context = new EFContext(options))
-                {
-                    var testDelete = new Keyword { Id = 1 };
-                    context.Keywords.Attach(testDelete);
-                    context.Keywords.Remove(testDelete);
-                    context.SaveChanges();
-                }
-                using(var context = new EFContext(options))
-                {
-                    test = context.Keywords.Where(k => k.Name == "food").FirstOrDefault();
-                }
-                Assert.Null(test);                
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
-
-        [Fact]
-        public void TestNeighbors()
-        {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            Keyword test;
+            Tag test;
             connection.Open();
             try
             {
@@ -174,10 +182,10 @@ namespace DotNetJobSeek.Domain.Test
                 {
 
                     context.AddRange(
-                        new KeywordNeighbor { Left = k1, Right = k2 },
-                        new KeywordNeighbor { Left = k1, Right = k3 },
-                        new KeywordNeighbor { Left = k1, Right = k4 },
-                        new KeywordNeighbor { Left = k2, Right = k4 }
+                        new TagNeighbor { Left = t1, Right = t2 },
+                        new TagNeighbor { Left = t1, Right = t3 },
+                        new TagNeighbor { Left = t1, Right = t4 },
+                        new TagNeighbor { Left = t2, Right = t4 }
                     );
                     try
                     {
@@ -191,17 +199,17 @@ namespace DotNetJobSeek.Domain.Test
 
                 using(var context = new EFContext(options))
                 {
-                    var testUpdate = context.Keywords.Where(k => k.Id == 1).FirstOrDefault();
+                    var testUpdate = context.Tags.Where(t => t.Id == 1).FirstOrDefault();
                     testUpdate.Name = "food1";
-                    context.Keywords.Update(testUpdate);
+                    context.Tags.Update(testUpdate);
                     context.SaveChanges();
                 }
                 using(var context = new EFContext(options))
                 {
-                    test = context.Keywords.Where(k => k.Id == 1)
-                            .Include(k => k.Rights)
+                    test = context.Tags.Where(t => t.Id == 1)
+                            .Include(t => t.Rights)
                                 .ThenInclude(tn => tn.Left)
-                            .Include(k => k.Lefts)
+                            .Include(t => t.Lefts)
                                 .ThenInclude(tn => tn.Right)
                     .FirstOrDefault();
                 }
@@ -213,6 +221,7 @@ namespace DotNetJobSeek.Domain.Test
             {
                 connection.Close();
             }
-        }
+
+        }        
     }
 }
