@@ -7,5 +7,6 @@ namespace DotNetJobSeek.Domain
     {
        public virtual ICollection<CategoryNeighbor> Lefts { get; set; }
        public virtual ICollection<CategoryNeighbor> Rights { get; set; }
+       public virtual ICollection<Job> Jobs { get; set; }
     }
 }

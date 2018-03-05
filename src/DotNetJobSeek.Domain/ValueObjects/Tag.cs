@@ -11,6 +11,7 @@ namespace DotNetJobSeek.Domain
 
        public virtual ICollection<TagKeyword> TagKeywords { get; set; }
        public virtual ICollection<SkillTag> SkillTags { get; set; }
+       public virtual ICollection<JobTag> JobTags { get; set; }
        
        public virtual ICollection<TagNeighbor> Lefts { get; set; }
        public virtual ICollection<TagNeighbor> Rights { get; set; }

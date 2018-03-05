@@ -47,6 +47,9 @@ namespace DotNetJobSeek.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new ValueObjectMapper<Skill>());
             modelBuilder.ApplyConfiguration(new SkillTagMapper());
             modelBuilder.ApplyConfiguration(new SkillNeighborMapper());            
+            // Job
+            modelBuilder.ApplyConfiguration(new JobTagMapper());
+            modelBuilder.ApplyConfiguration(new RequirementMapper());
         
         }
         // ValueObjects
@@ -58,6 +61,7 @@ namespace DotNetJobSeek.Infrastructure.EF
         public DbSet<Skill> Skills { get; set; }
         // Job Entities
         public DbSet<Requirement> Requirements { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
 
     }

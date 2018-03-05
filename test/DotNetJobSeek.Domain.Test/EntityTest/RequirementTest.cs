@@ -50,7 +50,6 @@ namespace DotNetJobSeek.Domain.Test
                 {
                     test = context.Requirements.FirstOrDefault();
                 }
-                System.Console.WriteLine(test.Id);
                 Assert.Equal("food", test.Description);
             }
             finally
